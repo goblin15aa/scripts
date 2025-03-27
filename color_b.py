@@ -250,27 +250,45 @@ def color_q(selection="all",mode="hist",gradient="bgr",nbins=11,sat=1.,value=1.,
   color_b(selection,item,mode,gradient,nbins,sat,value,minimum,maximum,debug)
 
 # function for creating the gradient
-def make_gradient(sel,gradient,nbins,sat,value,user_rgb,debug=0):
-  if gradient == 'bgr' or gradient == 'rainbow':
-    gradient = 'bgr'
-    col=[]
-    coldesc=[]
-    for j in range(nbins):
-      # must append the str(sel[j]) to the color name so that it is unique
-      # for the selection
-      coldesc.append('col' + gradient + str(j) + str(sel[j]))
-      # coldesc.append('col' + str(sel[j]) + str(j))
+def make_gradient(sel, gradient, nbins, sat, value, user_rgb, debug=0):
+    # ... 之前的代码保持不变 ...
 
-      # create colors using hsv scale (fractional) starting at blue(.6666667)
-      # through red(0.00000) in intervals of .6666667/(nbins -1) (the "nbins-1"
-      # ensures that the last color is, in fact, red (0)
-      # rewrote this to use the colorsys module to convert hsv to rgb
-      hsv = (colorsys.TWO_THIRD - colorsys.TWO_THIRD * float(j) / (nbins-1), sat, value)
-      #convert to rgb and append to color list
-      rgb = colorsys.hsv_to_rgb(hsv[0],hsv[1],hsv[2])
+    elif gradient == 'bgr':
+        col = []
+        coldesc = []
+        # 定义四种颜色的RGB值
+        colors = [
+            (1.0, 0.0, 0.0),    # red
+            (1.0, 1.0, 0.0),    # yellow
+            (0.0, 0.0, 1.0),    # Light blue
+            (0.0, 0.0, 0.5)     # Dark blue
+        ]
+        # 计算每个颜色区间
+        bin_size = nbins // 4
+        remainder = nbins % 4
 
-      col.append(rgb)
-      #cmd.set_color("col" + gradient + str(j),col[j])
+        for j in range(nbins):
+            # 根据B值从低到高的顺序分配颜色
+            if j < bin_size:
+                rgb = colors[0]  # red
+            elif j < 2 * bin_size:
+                rgb = colors[1]  # yellow
+            elif j < 3 * bin_size:
+                rgb = colors[2]  # Light blue
+            else:
+                rgb = colors[3]  # Dark blue
+
+            # 转换为HSV并调整饱和度和亮度
+            hsv = list(colorsys.rgb_to_hsv(rgb[0], rgb[1], rgb[2]))
+            hsv[1] = hsv[1] * sat
+            hsv[2] = hsv[2] * value
+            rgb = colorsys.hsv_to_rgb(hsv[0], hsv[1], hsv[2])
+
+            col.append(rgb)
+            coldesc.append('col' + gradient + str(j) + str(sel[j]))
+            cmd.set_color("col" + gradient + str(j) + str(sel[j]), col[j])
+
+    # ... 之后的代码保持不变 ...
       if debug:
         print("Colour RGB triplet [ %6.4f, %6.4f, %6.4f ] is defined as %s" % (col[j][0],col[j][1],col[j][2],"col"+str(j)+str(sel[j])))
       cmd.set_color("col" + gradient + str(j) + str(sel[j]),col[j])

@@ -38,7 +38,7 @@ def color_b(selection='all',item='b',mode='hist',gradient='bgr',nbins=11,sat=1.,
       B-value or occupancy, following a gradient of colours.  The
       gradients can be:
 
-      'bgr': blue -> green   -> red
+      'bgr': red -> yellow -> Light blue -> Dark blue
       'rgb': red  -> green   -> blue
       'bwr': blue -> white   -> red
       'rwb': red  -> white   -> blue

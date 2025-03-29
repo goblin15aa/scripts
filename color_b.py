@@ -38,7 +38,7 @@ def color_b(selection='all',item='b',mode='hist',gradient='bgr',nbins=11,sat=1.,
       B-value or occupancy, following a gradient of colours.  The
       gradients can be:
 
-      'bgr': blue -> green   -> red
+      'bgr': red  -> yellow  -> Light blue  -> Dark blue
       'rgb': red  -> green   -> blue
       'bwr': blue -> white   -> red
       'rwb': red  -> white   -> blue
@@ -262,7 +262,7 @@ def make_gradient(sel,gradient,nbins,sat,value,user_rgb,debug=0):
       # coldesc.append('col' + str(sel[j]) + str(j))
 
       # create colors using hsv scale (fractional) starting at blue(.6666667)
-      # through red(0.00000) in intervals of .6666667/(nbins -1) (the "nbins-1"
+      # through Dark blue(0.00000) in intervals of .6666667/(nbins -1) (the "nbins-1"
       # ensures that the last color is, in fact, red (0)
       # rewrote this to use the colorsys module to convert hsv to rgb
       hsv = (colorsys.TWO_THIRD - colorsys.TWO_THIRD * float(j) / (nbins-1), sat, value)
